@@ -1,15 +1,13 @@
 package stats;
 
 public class StringSelectors {
-    // implement convenience methods for selecting strings
+
     public Selector<String> longestString() {
-        // todo: implement this method
-        return null;
+        return new Selector<>((a, b) -> a.length() - b.length());
     }
 
     public Selector<String> shortestString() {
-        // todo: implement this method
-        return null;
+        return new Selector<>((a, b) -> b.length() - a.length());
     }
 }
 

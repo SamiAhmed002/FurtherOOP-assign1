@@ -1,32 +1,37 @@
 package lists;
 
-public class IntArrayList implements IntList {
-    int[] values;
+class EfficientIntLinkedList implements IntList {
+    IntNode head;
     int len;
+    IntNode tail;
 
-    public IntArrayList() {
-        values = new int[0];
+    public EfficientIntLinkedList() {
+        head = null;
         len = 0;
+        tail = null;
     }
 
     public boolean contains(int value) {
-        for (int i = 0; i < len; i++) {
-            if (values[i] == value) {
+        IntNode current = head;
+        while (current != null) {
+            if (current.value == value) {
                 return true;
             }
+            current = current.next;
         }
         return false;
     }
 
     public void append(int value) {
-        // this is inefficient but leave as is for now
-        int[] newValues = new int[len + 1];
-        for (int i = 0; i < len; i++) {
-            newValues[i] = values[i];
+        IntNode node = new IntNode(value);
+        if (head == null) {
+            head = node;
         }
-        newValues[len] = value;
-        values = newValues;
-        len++;
+        else {
+            tail.next = node;
+        }
+        tail = node;
+        len += 1;
     }
 
     public int length() {
@@ -38,7 +43,7 @@ public class IntArrayList implements IntList {
     }
 
     public static void main(String[] args) {
-        IntArrayList list = new IntArrayList();
+        EfficientIntLinkedList list = new EfficientIntLinkedList();
         list.append(1);
         list.append(2);
         list.append(3);

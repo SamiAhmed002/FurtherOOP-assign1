@@ -18,6 +18,7 @@ public class UMLLayout {
         Map<String, ClassLayout> layout = new HashMap<>();
         List<String> topologicalSortedClasses = topologicalSort(diagram);
 
+        // Map to store children relationships from the links
         Map<String, List<String>> childrenMap = buildChildrenMap(diagram);
         Map<String, Integer> depthMap = calculateDepths(topologicalSortedClasses, diagram);
 
@@ -94,7 +95,7 @@ public class UMLLayout {
 
         for (Link link : diagram.links()) {
             if (link.type() == LinkType.SUPERCLASS) {
-                childrenMap.get(link.to()).add(link.from());
+                childrenMap.get(link.from()).add(link.to());
             }
         }
 

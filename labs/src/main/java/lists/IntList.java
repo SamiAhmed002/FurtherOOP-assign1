@@ -9,5 +9,7 @@ public interface IntList {
 
     int length();
 
+    String getListClassName();
+
 }
 

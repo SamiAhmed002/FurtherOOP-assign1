@@ -1,12 +1,14 @@
 package lists;
 
-public class IntArrayList implements IntList {
+public class EfficientIntArrayList implements IntList {
     int[] values;
     int len;
+    int maxLen;
 
-    public IntArrayList() {
-        values = new int[0];
+    public EfficientIntArrayList() {
+        values = new int[10];
         len = 0;
+        maxLen = 10;
     }
 
     public boolean contains(int value) {
@@ -20,12 +22,18 @@ public class IntArrayList implements IntList {
 
     public void append(int value) {
         // this is inefficient but leave as is for now
-        int[] newValues = new int[len + 1];
-        for (int i = 0; i < len; i++) {
-            newValues[i] = values[i];
+        if (len < maxLen) {
+            values[len] = value;
         }
-        newValues[len] = value;
-        values = newValues;
+        else {
+            int[] newValues = new int[len * 2];
+            for (int i = 0; i < len; i++) {
+                newValues[i] = values[i];
+            }
+            newValues[len] = value;
+            values = newValues;
+            maxLen *= 2;
+        }
         len++;
     }
 
@@ -38,7 +46,7 @@ public class IntArrayList implements IntList {
     }
 
     public static void main(String[] args) {
-        IntArrayList list = new IntArrayList();
+        EfficientIntArrayList list = new EfficientIntArrayList();
         list.append(1);
         list.append(2);
         list.append(3);

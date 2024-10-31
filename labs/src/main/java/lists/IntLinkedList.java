@@ -10,17 +10,37 @@ class IntLinkedList implements IntList {
     }
 
     public boolean contains(int value) {
-        // todo: implement this properly
+        IntNode current = head;
+        while (current != null) {
+            if (current.value == value) {
+                return true;
+            }
+            current = current.next;
+        }
         return false;
     }
 
     public void append(int value) {
-        // todo: implement this properly!
-        len += 2;
+        IntNode node = new IntNode(value);
+        if (head == null) {
+            head = node;
+        }
+        else {
+            IntNode current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = node;
+        }
+        len += 1;
     }
 
     public int length() {
         return len;
+    }
+
+    public String getListClassName() {
+        return this.getClass().getName();  // Returns "lists.IntArrayList"
     }
 
     public static void main(String[] args) {

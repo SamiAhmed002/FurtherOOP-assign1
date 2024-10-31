@@ -5,7 +5,7 @@ import java.util.List;
 
 import reflection.uml.ReflectionData.*;
 
-public class MermaidWriter {
+public class    MermaidWriter {
     final static String superclass = " --|> ";
     final static String dependency = " ..> ";
     String writeMermaid(DiagramData diagramData) {

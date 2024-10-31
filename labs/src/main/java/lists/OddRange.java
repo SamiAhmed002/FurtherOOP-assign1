@@ -19,22 +19,27 @@ public class OddRange implements Iterable<Integer> {
 
     private static class OddRangeIterator implements Iterator<Integer> {
         private int current;
-        private int end;
+        private final int end;
 
         public OddRangeIterator(int start, int end) {
-            // todo: implement this properly
+            if (start % 2 != 0) {
+                this.current = start;
+            }
+            else {
+                this.current = ++start;
+            }
+            this.end = end;
         }
 
         @Override
         public boolean hasNext() {
-            // implement this properly
-            return false;
+            return current < end;
         }
 
         @Override
         public Integer next() {
-            // implement this properly
-            return 0;
+            current+=2;
+            return current - 2;
         }
     }
 

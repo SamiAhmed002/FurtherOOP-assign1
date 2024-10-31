@@ -24,10 +24,17 @@ public class CyclicGsonExample {
     }
 
     public static String serializeObject(MyObject obj) {
-        // todo: fix this to handle cyclic references
-        // so that it throws a CyclicGraphException when it encounters a cyclic reference
+        if (hasCycle(obj, obj)) {
+            throw new CyclicGraphException();
+        }
         Gson gson = new Gson();
         return gson.toJson(obj);
+    }
+
+    private static boolean hasCycle(MyObject start, MyObject current) {
+        if (current == null) return false;
+        if (current.ref == start) return true;
+        return hasCycle(start, current.ref);  
     }
 
     public static void main(String[] args) {

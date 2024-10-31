@@ -22,4 +22,8 @@ public class GenIntListWrapper implements IntList {
     public GenIntListWrapper(GenericList<Integer> list) {
         this.list = list;
     }
+
+    public String getListClassName() {
+        return list.getClass().getName();  // Returns the full class name of the wrapped list
+    }
 }
