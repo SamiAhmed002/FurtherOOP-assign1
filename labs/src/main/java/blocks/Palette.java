@@ -42,7 +42,6 @@ public class Palette {
     // if we have a sprite that contains the point (px, py), return it
     // and the size of the cells - the sprite location is already in pixel coordinates
     public Sprite getSprite(PixelLoc mousePoint, int cellSize) {
-        // Check if a sprite contains the given mouse point
         for (Sprite sprite : sprites) {
             if (sprite.contains(mousePoint, cellSize)) {
                 return sprite;
@@ -63,16 +62,14 @@ public class Palette {
     }
 
     public void doLayout(int x0, int y0, int cellSize) {
-        // Arrange sprites in a grid within the palette
+        // Arrange layout of sprites on the palette
 
         for (int i = 0; i < sprites.size(); i++) {
             Sprite sprite = sprites.get(i);
 
-            // Calculate grid position
             int row = i / nShapes;
             int col = i % nShapes;
 
-            // Set position based on the row and column
             int spriteX = x0 + col * (cellSize * 3);
             int spriteY = y0 + row * (cellSize * 3);
 
@@ -92,14 +89,12 @@ public class Palette {
             return;
         }
 
-        // Clear all sprites and add new randomly selected shapes
         sprites.clear();
 
         for (int i = 0; i < nShapes; i++) {
             int randomIndex = (int) (Math.random() * shapes.size());
             Shape randomShape = shapes.get(randomIndex);
 
-            // Add a new sprite with random shape, initially at (0, 0)
             Sprite sprite = new Sprite(randomShape, 0, 0);
             sprite.state = SpriteState.IN_PALETTE;
             sprites.add(sprite);

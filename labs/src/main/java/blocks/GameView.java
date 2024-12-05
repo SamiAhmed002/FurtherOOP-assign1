@@ -41,19 +41,15 @@ public class GameView extends JComponent {
 
         // Loop through each sprite in the palette
         for (Sprite sprite : palette.getSprites()) {
-            // Determine cell size: use `shrinkSize` for palette sprites
             int drawCellSize = sprite.state == BlockShapes.SpriteState.IN_PALETTE ? shrinkSize : cellSize;
 
             for (Cell cell : sprite.shape) {
-                // Calculate coordinates
                 int x = sprite.px + cell.x() * drawCellSize;
                 int y = sprite.py + cell.y() * drawCellSize;
 
-                // Draw the tile
                 g.setColor(Color.BLUE);
                 g.fillRect(x, y, drawCellSize, drawCellSize);
 
-                // Draw the outline
                 g.setColor(Color.BLACK);
                 g.drawRect(x, y, drawCellSize, drawCellSize);
             }

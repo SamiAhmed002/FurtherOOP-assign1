@@ -49,34 +49,31 @@ public class Model2dArray extends State2dArray implements ModelInterface {
                 return false; // Piece cannot be placed
             }
         }
-        return true; // Piece can be placed
+        return true;
     }
 
     @Override
     public void place(Piece piece) {
         if (canPlace(piece)) {
-            // Place the piece on the grid
             for (Cell cell : piece.cells()) {
-                grid[cell.x()][cell.y()] = true; // Mark the cell as occupied
+                grid[cell.x()][cell.y()] = true;
             }
 
             // Check which regions are complete
             Set<Cell> cellsToRemove = new HashSet<>();
-            int completedRegionCount = 0; // Track how many regions are completed in this move
+            int completedRegionCount = 0;
 
             for (Shape region : regions) {
                 if (isComplete(region)) {
                     completedRegionCount++;
-                    cellsToRemove.addAll(region); // Add all cells of the completed region to the set
+                    cellsToRemove.addAll(region);
                 }
             }
 
-            // Remove all cells in one go
             for (Cell cell : cellsToRemove) {
                 grid[cell.x()][cell.y()] = false;
             }
 
-            // Update the score
             if (completedRegionCount > 0) {
                 if (completedRegionCount == 1) {
                     // Single region completion
@@ -85,9 +82,9 @@ public class Model2dArray extends State2dArray implements ModelInterface {
                     // Multiple regions completion
                     score += (int) (Math.pow(2, completedRegionCount) + streak);
                 }
-                streak++; // Increment streak for consecutive turns
+                streak++;
             } else {
-                streak = 0; // Reset streak if no regions were completed
+                streak = 0;
             }
         }
     }
@@ -96,38 +93,38 @@ public class Model2dArray extends State2dArray implements ModelInterface {
     @Override
     public void remove(Shape region) {
         for (Cell cell : region) {
-            grid[cell.x()][cell.y()] = false; // Remove the cell from the grid
+            grid[cell.x()][cell.y()] = false;
         }
     }
 
     public boolean isComplete(Shape region) {
         for (Cell cell : region) {
             if (!grid[cell.x()][cell.y()]) {
-                return false; // If any cell is unoccupied, the region is not complete
+                return false;
             }
         }
-        return true; // All cells are occupied, region is complete
+        return true;
     }
 
     private boolean wouldBeComplete(Shape region, List<Cell> toAdd) {
         for (Cell cell : region) {
-            boolean isOccupied = grid[cell.x()][cell.y()]; // Check if cell is already occupied
-            boolean willBeOccupied = toAdd.contains(cell); // Check if cell is in the new piece
+            boolean isOccupied = grid[cell.x()][cell.y()];
+            boolean willBeOccupied = toAdd.contains(cell);
             if (!isOccupied && !willBeOccupied) {
-                return false; // Region wouldn't be complete
+                return false;
             }
         }
-        return true; // All cells would be occupied
+        return true;
     }
 
     @Override
     public boolean isGameOver(List<Shape> palettePieces) {
         for (Shape shape : palettePieces) {
             if (canPlaceAnywhere(shape)) {
-                return false; // Game is not over if at least one shape can be placed
+                return false;
             }
         }
-        return true; // Game is over if no shape can be placed anywhere
+        return true;
     }
 
 
@@ -137,11 +134,11 @@ public class Model2dArray extends State2dArray implements ModelInterface {
             for (int y = 0; y < height; y++) {
                 Piece piece = new Piece(shape, new Cell(x, y));
                 if (canPlace(piece)) {
-                    return true; // If the shape can be placed at any location, return true
+                    return true;
                 }
             }
         }
-        return false; // If no valid position found, return false
+        return false;
     }
 
     @Override
@@ -149,7 +146,7 @@ public class Model2dArray extends State2dArray implements ModelInterface {
         List<Shape> poppable = new ArrayList<>();
         for (Shape region : regions) {
             if (wouldBeComplete(region, piece.cells())) {
-                poppable.add(region); // Add region to the poppable list if it would be completed
+                poppable.add(region);
             }
         }
         return poppable;
@@ -161,7 +158,7 @@ public class Model2dArray extends State2dArray implements ModelInterface {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (grid[i][j]) {
-                    occupiedCells.add(new Cell(i, j)); // Add occupied cell to the set
+                    occupiedCells.add(new Cell(i, j));
                 }
             }
         }

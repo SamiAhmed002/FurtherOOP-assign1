@@ -50,17 +50,15 @@ public class Controller extends MouseAdapter {
     public void mouseDragged(MouseEvent e) {
         if (selectedSprite == null) return;
 
-        // Update the sprite's position dynamically while dragging
         selectedSprite.px = e.getX() - (selectedSprite.shape.stream().mapToInt(Cell::x).max().orElse(0) * view.cellSize) / 2;
         selectedSprite.py = e.getY() - (selectedSprite.shape.stream().mapToInt(Cell::y).max().orElse(0) * view.cellSize) / 2;
 
-        // Preview placement using a "ghost shape"
         ghostShape = selectedSprite.snapToGrid(view.margin, view.cellSize);
         if (model.canPlace(ghostShape)) {
             view.ghostShape = ghostShape;
             view.poppableRegions = model.getPoppableRegions(ghostShape);
         } else {
-            view.ghostShape = null; // Invalid placement
+            view.ghostShape = null;
         }
 
         view.repaint();
@@ -72,24 +70,21 @@ public class Controller extends MouseAdapter {
         // Snap sprite to grid and attempt placement
         ghostShape = selectedSprite.snapToGrid(view.margin, view.cellSize);
         if (model.canPlace(ghostShape)) {
-            model.place(ghostShape); // Place the shape into the grid
-            selectedSprite.state = SpriteState.PLACED; // Mark sprite as placed
+            model.place(ghostShape);
+            selectedSprite.state = SpriteState.PLACED;
             palette.removeSprite(selectedSprite);
         } else {
-            selectedSprite.state = SpriteState.IN_PALETTE; // Reset to palette
-            selectedSprite.resetPosition(); // Return sprite to its initial palette position
+            selectedSprite.state = SpriteState.IN_PALETTE;
+            selectedSprite.resetPosition();
         }
 
-        // Update game state and title
         gameOver = model.isGameOver(palette.getShapesToPlace());
         frame.setTitle(getTitle());
 
-        // Clear ghost shape
         ghostShape = null;
         view.ghostShape = null;
         view.poppableRegions = null;
 
-        // Repaint and reset selection
         view.repaint();
         selectedSprite = null;
     }

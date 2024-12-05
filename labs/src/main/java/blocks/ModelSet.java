@@ -72,28 +72,24 @@ public class ModelSet extends StateSet implements ModelInterface {
     }
 
     public boolean canPlaceAnywhere(Shape shape) {
-        // Iterate through all grid locations and try placing the shape at each one
         for (Cell loc : locations) {
-            // Create a new Piece with the current grid location as the offset
             Piece piece = new Piece(shape, loc);
 
             // Check if the piece can be placed (it should not overlap any other cells)
             if (canPlace(piece)) {
-                return true;  // If the shape can be placed, return true
+                return true;
             }
         }
-        return false;  // If no valid position is found, return false
+        return false;
     }
 
     @Override
     public List<Shape> getPoppableRegions(Piece piece) {
         List<Shape> poppableRegions = new ArrayList<>();
 
-        // Simulate placing the piece
         Set<Cell> hypotheticalOccupied = new HashSet<>(occupiedCells);
         hypotheticalOccupied.addAll(piece.cells());
 
-        // Check if any regions become complete
         for (Shape region : regions) {
             if (hypotheticalOccupied.containsAll(region)) {
                 poppableRegions.add(region);
