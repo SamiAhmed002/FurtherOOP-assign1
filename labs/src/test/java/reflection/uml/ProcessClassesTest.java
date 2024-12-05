@@ -36,6 +36,16 @@ class TestDependencyClass {
 
 public class ProcessClassesTest {
 
+    public static void main(String[] args) {
+        ProcessClassesTest testInstance = new ProcessClassesTest();
+        testInstance.testGetClassType();
+        testInstance.testGetSuperclasses();
+        testInstance.testGetFields();
+        testInstance.testGetMethods();
+        testInstance.testGetFieldDependencies();
+        testInstance.testGetMethodDependencies();
+        testInstance.testProcess();
+    }
 
     @Test
     public void testGetClassType() {
@@ -91,14 +101,10 @@ public class ProcessClassesTest {
     public void testGetFieldDependencies() {
         ProcessClasses processor = new ProcessClasses();
         List<Class<?>> classList = Arrays.asList(TestDependencyClass.class);
-
-        // Define a test class with a dependency
         class TestWithDependency {
             TestDependencyClass dependencyField;
         }
-
         List<Link> dependencies = processor.getFieldDependencies(TestWithDependency.class, classList);
-
         assertEquals(1, dependencies.size(), "Expected TestWithDependency to have 1 field dependency.");
         assertEquals(new Link("TestWithDependency", "TestDependencyClass", LinkType.DEPENDENCY), dependencies.get(0));
     }

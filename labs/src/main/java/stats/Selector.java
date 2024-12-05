@@ -27,6 +27,7 @@ public class Selector<T> {
 
     public static void main(String[] args) {
         Selector<Integer> selector = new Selector<>((a, b) -> b - a);
+        //^ when .add is called, a = object b = bestFit. if b-a > 0 then a becomes bestFit
         selector.add(1);
         selector.add(2);
         selector.add(3);

@@ -4,9 +4,9 @@ package lists;
 import java.util.Iterator;
 
 class GenericArrayList<T> implements GenericList<T> {
-    static int initialCapacity = 10;
+    static int maxCapacity = 10;
 
-    T[] values = (T[]) new Object[initialCapacity];
+    T[] values = (T[]) new Object[maxCapacity];
     int len = 0;
 
     public boolean contains(T value) {
@@ -19,12 +19,18 @@ class GenericArrayList<T> implements GenericList<T> {
     }
 
     public void append(T value) {
-        T[] newValues = (T[]) new Object[len + 1];
-        for (int i = 0; i < len; i++) {
-            newValues[i] = values[i];
+        if (len < maxCapacity) {
+            values[len] = value;
         }
-        newValues[len] = value;
-        values = newValues;
+        else {
+            T[] newValues = (T[]) new Object[maxCapacity * 2];
+            for (int i = 0; i < len; i++) {
+                newValues[i] = values[i];
+            }
+            newValues[len] = value;
+            values = newValues;
+            maxCapacity *= 2;
+        }
         len++;
     }
 

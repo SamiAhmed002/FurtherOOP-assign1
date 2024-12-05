@@ -8,8 +8,9 @@ import java.util.List;
 
 public class HelloGsonRecord {
 
-    // todo: modify this to support reading records using a GsonBuilder
-    static Gson gson = new Gson();
+    static Gson gson = new GsonBuilder()
+            .registerTypeAdapterFactory(new RecordTypeAdapterFactory())
+            .create();
 
     public record QMPerson(String firstnames, String surname,
                     String email, int personId, boolean isCurrent) {
@@ -20,8 +21,7 @@ public class HelloGsonRecord {
     }
 
     public static QMPerson fromJsonString(String json) {
-        // todo: return a QMPerson object from the json string
-        return null;
+        return gson.fromJson(json, QMPerson.class);
     }
 
 

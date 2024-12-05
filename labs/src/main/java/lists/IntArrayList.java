@@ -10,7 +10,11 @@ public class IntArrayList implements IntList {
     }
 
     public boolean contains(int value) {
-        // todo implement this properly
+        for (int i = 0; i < len; i++) {
+            if (values[i] == value) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -26,7 +30,20 @@ public class IntArrayList implements IntList {
     }
 
     public int length() {
-        // todo: fix this!
-        return 0;
+        return len;
+    }
+
+    public String getListClassName() {
+        return this.getClass().getName();  // Returns "lists.IntArrayList"
+    }
+
+    public static void main(String[] args) {
+        IntArrayList list = new IntArrayList();
+        list.append(1);
+        list.append(2);
+        list.append(3);
+        System.out.println(list.contains(2));
+        System.out.println(list.contains(4));
+        System.out.println(list.length());
     }
 }

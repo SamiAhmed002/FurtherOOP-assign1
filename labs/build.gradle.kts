@@ -5,7 +5,7 @@ import java.io.FileOutputStream
 plugins {
     java
     jacoco
-//    id("com.github.spotbugs") version "5.0.13"
+    id("com.github.spotbugs") version "5.0.13"
 }
 
 group = "ecs658"
@@ -84,7 +84,7 @@ tasks.check {
 //        tasks.ckMetrics,
         tasks.named("ckMetrics"), // Use named to reference ckMetrics properly
 
-//        tasks.spotbugsMain
+        tasks.spotbugsMain
     )
 }
 

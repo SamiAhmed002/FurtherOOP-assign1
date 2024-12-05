@@ -6,13 +6,32 @@ import reflection.uml.ReflectionData.*;
 public class ProcessClasses {
 
     List<Link> getSuperclasses(Class<?> c, List<Class<?>> javaClasses) {
-        // todo: implement this method
-        return null;
+        List<Link> links = new ArrayList<>();
+
+        // Check and add the immediate superclass if it's in javaClasses
+        Class<?> superclass = c.getSuperclass();
+        if (superclass != null && javaClasses.contains(superclass)) {
+            links.add(new Link(c.getSimpleName(), superclass.getSimpleName(), LinkType.SUPERCLASS));
+        }
+
+        // Check and add all interfaces implemented by this class if they're in javaClasses
+        for (Class<?> iface : c.getInterfaces()) {
+            if (javaClasses.contains(iface)) {
+                links.add(new Link(c.getSimpleName(), iface.getSimpleName(), LinkType.SUPERCLASS));
+            }
+        }
+
+        return links;
     }
 
     ClassType getClassType(Class<?> c) {
-        // todo: fix this broken implementation
-        return ClassType.CLASS;
+        if (c.isInterface()) {
+            return ClassType.INTERFACE;
+        } else if (java.lang.reflect.Modifier.isAbstract(c.getModifiers())) {
+            return ClassType.ABSTRACT;
+        } else {
+            return ClassType.CLASS;
+        }
     }
 
     List<FieldData> getFields(Class<?> c) {
@@ -24,18 +43,43 @@ public class ProcessClasses {
     }
 
     List<MethodData> getMethods(Class<?> c) {
-        // todo: implement this method
-        return null;
+        List<MethodData> methods = new ArrayList<>();
+        for (java.lang.reflect.Method m : c.getDeclaredMethods()) {
+            String methodName = m.getName();
+            String returnType = m.getReturnType().getSimpleName();
+            methods.add(new MethodData(methodName, returnType));
+        }
+        return methods;
     }
 
     List<Link> getFieldDependencies(Class<?> c, List<Class<?>> javaClasses) {
-        // todo: implement this method - return dependent classes that are in javaClasses
-        return null;
+        List<Link> links = new ArrayList<>();
+        for (java.lang.reflect.Field f : c.getDeclaredFields()) {
+            Class<?> fieldType = f.getType();
+            if (javaClasses.contains(fieldType)) {
+                links.add(new Link(c.getSimpleName(), fieldType.getSimpleName(), LinkType.DEPENDENCY));
+            }
+        }
+        return links;
     }
 
     List<Link> getMethodDependencies(Class<?> c, List<Class<?>> javaClasses) {
-        // todo: implement this method - return dependent classes that are in javaClasses
-        return null;
+        List<Link> links = new ArrayList<>();
+        for (java.lang.reflect.Method m : c.getDeclaredMethods()) {
+            // Check return type dependency
+            Class<?> returnType = m.getReturnType();
+            if (javaClasses.contains(returnType)) {
+                links.add(new Link(c.getSimpleName(), returnType.getSimpleName(), LinkType.DEPENDENCY));
+            }
+            // Check parameter dependencies
+            for (java.lang.reflect.Parameter p : m.getParameters()) {
+                Class<?> paramType = p.getType();
+                if (javaClasses.contains(paramType)) {
+                    links.add(new Link(c.getSimpleName(), paramType.getSimpleName(), LinkType.DEPENDENCY));
+                }
+            }
+        }
+        return links;
     }
 
     DiagramData process(List<Class<?>> javaClasses) {

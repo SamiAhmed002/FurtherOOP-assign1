@@ -1,0 +1,154 @@
+@startuml
+
+' BlockShapes package
+package "blocks" {
+    class BlockShapes {
+        +record Cell(int x, int y)
+        +static class Shape
+        +static class Piece
+        +static class Sprite
+        +enum SpriteState { IN_PLAY, IN_PALETTE, PLACED }
+        +static class ShapeSet
+    }
+
+    BlockShapes : -Cell
+    BlockShapes : -Shape
+    BlockShapes : -Piece
+    BlockShapes : -SpriteState
+    BlockShapes : -Sprite
+    BlockShapes : -ShapeSet
+}
+
+' Controller Class
+class Controller {
+    +GameView view
+    +ModelInterface model
+    +Palette palette
+    +JFrame frame
+    +Sprite selectedSprite
+    +Piece ghostShape
+    +boolean gameOver
+    +Controller(GameView view, ModelInterface model, Palette palette, JFrame frame)
+    +mousePressed(MouseEvent e)
+    +mouseDragged(MouseEvent e)
+    +mouseReleased(MouseEvent e)
+    +String getTitle()
+}
+
+' GameView Class
+class GameView {
+    +ModelInterface model
+    +Palette palette
+    +int margin
+    +int shapeRegionHeight
+    +int cellSize
+    +int paletteCellSize
+    +int shrinkSize
+    +Piece ghostShape
+    +List<Shape> poppableRegions
+    +paint(Graphics g)
+}
+
+' Associations between classes
+Controller -> GameView : interacts with
+Controller -> ModelInterface : interacts with
+Controller -> Palette : interacts with
+GameView -> ModelInterface : interacts with
+GameView -> Palette : interacts with
+GameView -> BlockShapes.Sprite : interacts with
+
+' Model classes and interfaces
+
+interface ModelInterface {
+    +canPlace(Piece piece): boolean
+    +place(Piece piece): void
+    +remove(Shape region): void
+    +isComplete(Shape region): boolean
+    +isGameOver(List<Shape> palettePieces): boolean
+    +getPoppableRegions(Piece piece): List<Shape>
+    +getOccupiedCells(): Set<Cell>
+    +getScore(): int
+}
+
+class Model2dArray {
+    -regions: List<Shape>
+    -streak: int
+    +Model2dArray()
+    +canPlace(Piece piece): boolean
+    +place(Piece piece): void
+    +remove(Shape region): void
+    +isComplete(Shape region): boolean
+    +isGameOver(List<Shape> palettePieces): boolean
+    +getPoppableRegions(Piece piece): List<Shape>
+    +getOccupiedCells(): Set<Cell>
+    +getScore(): int
+}
+
+class ModelSet {
+    -locations: Set<Cell>
+    -regions: List<Shape>
+    +ModelSet()
+    +canPlace(Piece piece): boolean
+    +place(Piece piece): void
+    +remove(Shape region): void
+    +isComplete(Shape region): boolean
+    +isGameOver(List<Shape> palettePieces): boolean
+    +canPlaceAnywhere(Shape shape): boolean
+    +getPoppableRegions(Piece piece): List<Shape>
+    +getOccupiedCells(): Set<Cell>
+    +getScore(): int
+}
+
+class Palette {
+    -shapes: ArrayList<Shape>
+    -sprites: List<Sprite>
+    -nShapes: int
+    +Palette()
+    +getShapes(): ArrayList<Shape>
+    +getShapesToPlace(): ArrayList<Shape>
+    +getSprites(): List<Sprite>
+    +getSprite(PixelLoc mousePoint, int cellSize): Sprite
+    +doLayout(int x0, int y0, int cellSize): void
+    +replenish(): void
+    +removeSprite(Sprite sprite): void
+    +main(args: String[]): void
+}
+
+class RegionHelper {
+    -width: int
+    -height: int
+    -subSize: int
+    -nRows: int
+    -nCols: int
+    -nSubRows: int
+    +rowShape(int row): Shape
+    +colShape(int col): Shape
+    +subSquareShape(int x, int y): Shape
+    +rowRegions(): ArrayList<Shape>
+    +colRegions(): ArrayList<Shape>
+    +subSquareRegions(): ArrayList<Shape>
+    +allRegions(): ArrayList<Shape>
+    +main(args: String[]): void
+}
+
+class State2dArray {
+    -grid: boolean[][]
+    -score: int
+}
+
+class StateSet {
+    -occupiedCells: Set<Cell>
+    -score: int
+}
+
+' Class Relationships
+Model2dArray --|> ModelInterface
+ModelSet --|> ModelInterface
+Palette --> Shape
+Palette --> Sprite
+RegionHelper --> Shape
+RegionHelper --> Cell
+State2dArray --> Cell
+StateSet --> Cell
+StateSet --> ModelInterface
+@enduml

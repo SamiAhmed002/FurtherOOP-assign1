@@ -8,6 +8,6 @@ public class HelloWorld {
 
     // A simple method to return a greeting message
     public static String getGreeting() {
-        return "Hello, World";
+        return "Hello, World!";
     }
 }
